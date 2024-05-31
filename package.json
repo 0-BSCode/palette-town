@@ -33,6 +33,6 @@
   },
   "lint-staged": {
     "src/**/*.{ts,svelte}": ["eslint --fix", "prettier --write"],
-    "src/**/*.{css}": ["prettier --write"]
+    "src/**/*.css": ["prettier --write"]
   }
 }
