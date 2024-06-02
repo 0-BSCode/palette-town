@@ -45,6 +45,8 @@
     ]
   },
   "dependencies": {
+    "extract-colors": "^4.0.6",
+    "get-pixels": "^3.3.3",
     "svelte-file-dropzone": "^2.0.7"
   }
 }
