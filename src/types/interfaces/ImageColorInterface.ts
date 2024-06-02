@@ -1,4 +1,4 @@
-export interface ColorI {
+export interface ImageColorI {
   hex: string;
   red: number;
   green: number;

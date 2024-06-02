@@ -1,13 +1,18 @@
 <script lang="ts">
   import Dropzone from "svelte-file-dropzone";
   import { extractColorsFromSrc } from "extract-colors";
-  import type { ColorI } from "./types/interfaces/ColorInterface";
+  import type { ImageColorI } from "./types/interfaces/ImageColorInterface";
   import calculateRGBBrightness from "./utils/calculateRGBBrightness";
+  import ColorPaletteService from "./services/ColorPaletteService";
+  import type { ColorPaletteI } from "./types/interfaces/ColorPaletteInterface";
 
   let acceptedFile: File | undefined = undefined;
   let rejectedFile: File | undefined = undefined;
   let file: HTMLImageElement;
-  let colors: ColorI[] = [];
+  let colors: ImageColorI[] = [];
+  let palette: ColorPaletteI | undefined = undefined;
+  let selectedColor: ImageColorI | undefined = undefined;
+  const colorPaletteService = new ColorPaletteService();
   $: showFile = acceptedFile !== undefined;
 
   interface DropzoneEvent {
@@ -34,6 +39,7 @@
           ...r,
           isDark: calculateRGBBrightness(r.red, r.green, r.blue) < 128,
         }));
+        selectedColor = colors[colors.length - 1];
       });
       reader.readAsDataURL(acceptedFile);
     }
@@ -42,6 +48,12 @@
   function handleDeleteFile() {
     acceptedFile = undefined;
     colors = [];
+  }
+
+  async function handleColorSelect(colorHex: string) {
+    selectedColor = colors.find((c) => c.hex === colorHex);
+    // TODO: Make reactive statement
+    palette = await colorPaletteService.fetchPalette(colorHex);
   }
 </script>
 
@@ -75,19 +87,42 @@
       >Delete</button
     >
   </nav>
-  <body class="flex h-full w-3/4 flex-grow flex-col bg-slate-400 p-3">
+  <body class="flex h-full w-3/4 flex-grow flex-col gap-3 bg-slate-400 p-3">
     <!-- Color list -->
-    <section class="flex flex-wrap gap-2">
-      {#each colors as color}
-        <div
-          class="flex aspect-square w-fit items-center rounded-md p-5"
-          style={`background-color: ${color.hex}; color: ${color.isDark ? "white" : "black"}`}
-        >
-          <p>
-            {color.hex}
-          </p>
+    <section class="flex flex-col gap-1">
+      <h2>Image Colors</h2>
+      {#if colors.length}
+        <div class="flex flex-wrap gap-2">
+          {#each colors as color}
+            <button
+              class="flex aspect-square w-fit items-center rounded-md p-5"
+              style={`background-color: ${color.hex}; color: ${color.isDark ? "white" : "black"}; ${color.hex === selectedColor?.hex ? "border: 2px solid black" : ""}`}
+              on:click={() => handleColorSelect(color.hex)}
+            >
+              <p>
+                {color.hex}
+              </p>
+            </button>
+          {/each}
         </div>
-      {/each}
+      {:else}
+        <p>No colors found</p>
+      {/if}
     </section>
+    <!-- Color Recommender -->
+    {#if palette}
+      <section class="flex h-48 flex-col gap-2">
+        <h2>Color Recommendations</h2>
+        <div class="flex flex-1">
+          {#each palette.colors || [] as paletteColor}
+            <button
+              style={`flex: 1; background-color: ${paletteColor.hex}; color: ${paletteColor.isDark ? "white" : "black"}`}
+            >
+              {paletteColor.hex}
+            </button>
+          {/each}
+        </div>
+      </section>
+    {/if}
   </body>
 </main>
