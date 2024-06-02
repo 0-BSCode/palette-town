@@ -1,4 +1,4 @@
-import { ColorPaletteEnum } from "../types/enums/ColorPaletteEnums";
+import { ColorPaletteEnum } from "../types/enums/ColorPaletteEnum";
 import type { ColorPaletteI } from "../types/interfaces/ColorPaletteInterface";
 import type { ColorQueryI } from "../types/interfaces/ColorQueryInterface";
 import type { ColorResponseI } from "../types/interfaces/ColorResponseInterface";
@@ -17,12 +17,12 @@ const colorPaletteStringToEnumMapping = {
 };
 
 class ColorPaletteService {
-  async fetchPalette(hexString: string) {
+  async fetchPalette(hexString: string, mode: ColorPaletteEnum) {
     const hex = hexString.replace("#", "");
 
     const queryObject: ColorQueryI = {
       hex,
-      mode: ColorPaletteEnum.MONOCHROME,
+      mode: mode,
     };
 
     const urlParams = this.#generateQueryParams(queryObject);

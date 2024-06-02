@@ -1,4 +1,4 @@
-import type { ColorPaletteEnum } from "../enums/ColorPaletteEnums";
+import type { ColorPaletteEnum } from "../enums/ColorPaletteEnum";
 
 export interface ColorPaletteI {
   mode: ColorPaletteEnum;

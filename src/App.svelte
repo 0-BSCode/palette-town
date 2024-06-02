@@ -5,6 +5,7 @@
   import calculateRGBBrightness from "./utils/calculateRGBBrightness";
   import ColorPaletteService from "./services/ColorPaletteService";
   import type { ColorPaletteI } from "./types/interfaces/ColorPaletteInterface";
+  import { ColorPaletteEnum } from "./types/enums/ColorPaletteEnum";
 
   let acceptedFile: File | undefined = undefined;
   let rejectedFile: File | undefined = undefined;
@@ -12,6 +13,8 @@
   let colors: ImageColorI[] = [];
   let palette: ColorPaletteI | undefined = undefined;
   let selectedColor: ImageColorI | undefined = undefined;
+  let paletteMode: ColorPaletteEnum = ColorPaletteEnum.MONOCHROME;
+  let modeOption: ColorPaletteEnum = ColorPaletteEnum.MONOCHROME;
   const colorPaletteService = new ColorPaletteService();
   $: showFile = acceptedFile !== undefined;
 
@@ -53,7 +56,16 @@
   async function handleColorSelect(colorHex: string) {
     selectedColor = colors.find((c) => c.hex === colorHex);
     // TODO: Make reactive statement
-    palette = await colorPaletteService.fetchPalette(colorHex);
+    palette = await colorPaletteService.fetchPalette(colorHex, paletteMode);
+  }
+
+  async function handleModeSelect() {
+    paletteMode = modeOption;
+    // TODO: Deal with undefined hex
+    palette = await colorPaletteService.fetchPalette(
+      selectedColor?.hex || "",
+      paletteMode,
+    );
   }
 </script>
 
@@ -113,6 +125,11 @@
     {#if palette}
       <section class="flex h-48 flex-col gap-2">
         <h2>Color Recommendations</h2>
+        <select bind:value={modeOption} on:change={handleModeSelect}>
+          {#each Object.values(ColorPaletteEnum) as value}
+            <option {value} selected={paletteMode === value}>{value}</option>
+          {/each}
+        </select>
         <div class="flex flex-1">
           {#each palette.colors || [] as paletteColor}
             <button
