@@ -30,7 +30,6 @@ class ColorPaletteService {
     const result = await fetch(`${BASE_URL}?${urlParams}`);
     const data: ColorResponseI = await result.json();
     const colorPalette = this.#parseResponseInfo(data);
-    console.log(colorPalette);
 
     return colorPalette;
   }

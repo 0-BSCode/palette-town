@@ -16,6 +16,7 @@
   let paletteMode: ColorPaletteEnum = ColorPaletteEnum.MONOCHROME;
   let modeOption: ColorPaletteEnum = ColorPaletteEnum.MONOCHROME;
   const colorPaletteService = new ColorPaletteService();
+  // TODO: Fix (when there's a valid input bc it can be file or URL)
   $: showFile = acceptedFile !== undefined;
 
   interface DropzoneEvent {
@@ -67,31 +68,52 @@
       paletteMode,
     );
   }
+
+  // TODO: Clean up (separate logic for image data and image URL data)
+  async function pasteFunction(e: ClipboardEvent) {
+    acceptedFile = e.clipboardData?.files[0];
+    const textData = e.clipboardData?.getData("Text");
+    console.log(textData);
+    if (acceptedFile) {
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+        file.setAttribute("src", reader.result as string);
+      });
+      reader.readAsDataURL(acceptedFile);
+    } else if (textData?.length) {
+      file.setAttribute("src", textData);
+    }
+  }
 </script>
+
+<!-- <svelte:window on:paste={pasteFunction} /> -->
 
 <main class="flex h-screen min-h-fit">
   <nav class="m-8 flex w-1/4 flex-col items-center gap-2">
     <h1>Image</h1>
+    <!-- <form id="new_document_attachment" method="post" enctype="multipart/form-data"> -->
+    <input type="text" accept="image/*" on:paste={pasteFunction} />
+    <!-- </form> -->
     <Dropzone
       on:drop={handleFilesSelect}
       accept={"image/*"}
       multiple={false}
       containerStyles="padding-block: 0.5rem; display: flex; flex-direction: column; flex: 2; align-items: center; justify-content: center; border: 2px dashed #ccc; border-radius: 5px; width: 100%;"
     >
-      {#if showFile}
-        <div
-          class="relative flex h-full flex-1 flex-col justify-center overflow-y-hidden"
-        >
-          <img
-            bind:this={file}
-            class="h-96 object-contain"
-            src=""
-            alt="Preview"
-          />
-        </div>
-      {:else}
+      <!-- {#if showFile} -->
+      <div
+        class="relative flex h-full flex-1 flex-col justify-center overflow-y-hidden"
+      >
+        <img
+          bind:this={file}
+          class="h-96 object-contain"
+          src=""
+          alt="Preview"
+        />
+      </div>
+      <!-- {:else}
         <span>Image Preview</span>
-      {/if}
+      {/if} -->
     </Dropzone>
     <button
       on:click={handleDeleteFile}
