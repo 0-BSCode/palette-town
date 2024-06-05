@@ -1,4 +1,5 @@
 <script lang="ts">
+  import "./app.css";
   import Dropzone from "svelte-file-dropzone";
   import { extractColorsFromSrc } from "extract-colors";
   import type { ImageColorI } from "./types/interfaces/ImageColorInterface";
@@ -6,6 +7,7 @@
   import ColorPaletteService from "./services/ColorPaletteService";
   import type { ColorPaletteI } from "./types/interfaces/ColorPaletteInterface";
   import { ColorPaletteEnum } from "./types/enums/ColorPaletteEnum";
+  import { Button } from "$lib/components/ui/button";
 
   let acceptedFile: File | undefined = undefined;
   let rejectedFile: File | undefined = undefined;
@@ -86,8 +88,6 @@
   }
 </script>
 
-<!-- <svelte:window on:paste={pasteFunction} /> -->
-
 <main class="flex h-screen min-h-fit">
   <nav class="m-8 flex w-1/4 flex-col items-center gap-2">
     <h1>Image</h1>
@@ -96,7 +96,7 @@
     <!-- </form> -->
     <Dropzone
       on:drop={handleFilesSelect}
-      accept={"image/*"}
+      accept="image/*"
       multiple={false}
       containerStyles="padding-block: 0.5rem; display: flex; flex-direction: column; flex: 2; align-items: center; justify-content: center; border: 2px dashed #ccc; border-radius: 5px; width: 100%;"
     >
@@ -104,22 +104,13 @@
       <div
         class="relative flex h-full flex-1 flex-col justify-center overflow-y-hidden"
       >
-        <img
-          bind:this={file}
-          class="h-96 object-contain"
-          src=""
-          alt="Preview"
-        />
+        <img bind:this={file} class="h-96 object-contain" alt="Preview" />
       </div>
       <!-- {:else}
         <span>Image Preview</span>
       {/if} -->
     </Dropzone>
-    <button
-      on:click={handleDeleteFile}
-      class="z-50 my-2 w-full border-2 border-red-200 text-center"
-      >Delete</button
-    >
+    <Button on:click={handleDeleteFile}>Delete</Button>
   </nav>
   <body class="flex h-full w-3/4 flex-grow flex-col gap-3 bg-slate-400 p-3">
     <!-- Color list -->
