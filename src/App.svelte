@@ -1,6 +1,5 @@
 <script lang="ts">
   import "./app.css";
-  import Dropzone from "svelte-file-dropzone";
   import { extractColorsFromSrc } from "extract-colors";
   import type { ImageColorI } from "./types/interfaces/ImageColorInterface";
   import calculateRGBBrightness from "./utils/calculateRGBBrightness";
@@ -8,6 +7,9 @@
   import type { ColorPaletteI } from "./types/interfaces/ColorPaletteInterface";
   import { ColorPaletteEnum } from "./types/enums/ColorPaletteEnum";
   import { Button } from "$lib/components/ui/button";
+  import FileInput from "./components/organisms/FileInput.svelte";
+  import ColorPalette from "./components/organisms/ColorPalette.svelte";
+  import ColorRecommendations from "./components/organisms/ColorRecommendations.svelte";
 
   let acceptedFile: File | undefined = undefined;
   let rejectedFile: File | undefined = undefined;
@@ -75,7 +77,6 @@
   async function pasteFunction(e: ClipboardEvent) {
     acceptedFile = e.clipboardData?.files[0];
     const textData = e.clipboardData?.getData("Text");
-    console.log(textData);
     if (acceptedFile) {
       const reader = new FileReader();
       reader.addEventListener("load", () => {
@@ -91,28 +92,15 @@
 <main class="flex h-screen min-h-fit">
   <nav class="m-8 flex w-1/4 flex-col items-center gap-2">
     <h1>Image</h1>
+    <FileInput />
     <!-- <form id="new_document_attachment" method="post" enctype="multipart/form-data"> -->
     <input type="text" accept="image/*" on:paste={pasteFunction} />
     <!-- </form> -->
-    <Dropzone
-      on:drop={handleFilesSelect}
-      accept="image/*"
-      multiple={false}
-      containerStyles="padding-block: 0.5rem; display: flex; flex-direction: column; flex: 2; align-items: center; justify-content: center; border: 2px dashed #ccc; border-radius: 5px; width: 100%;"
-    >
-      <!-- {#if showFile} -->
-      <div
-        class="relative flex h-full flex-1 flex-col justify-center overflow-y-hidden"
-      >
-        <img bind:this={file} class="h-96 object-contain" alt="Preview" />
-      </div>
-      <!-- {:else}
-        <span>Image Preview</span>
-      {/if} -->
-    </Dropzone>
+
     <Button on:click={handleDeleteFile}>Delete</Button>
   </nav>
   <body class="flex h-full w-3/4 flex-grow flex-col gap-3 bg-slate-400 p-3">
+    <ColorPalette />
     <!-- Color list -->
     <section class="flex flex-col gap-1">
       <h2>Image Colors</h2>
@@ -135,6 +123,7 @@
       {/if}
     </section>
     <!-- Color Recommender -->
+    <ColorRecommendations />
     {#if palette}
       <section class="flex h-48 flex-col gap-2">
         <h2>Color Recommendations</h2>
