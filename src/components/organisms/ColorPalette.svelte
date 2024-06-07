@@ -22,6 +22,8 @@
       SelectedColorStore.update((_current) => {
         return palette[palette.length - 1];
       });
+    } else {
+      palette = [];
     }
   });
 

@@ -12,6 +12,10 @@
 
   SelectedColorStore.subscribe(async (value) => {
     selectedColor = value;
+
+    if (!value) {
+      paletteRecommendation = undefined;
+    }
   });
 
   async function setPalette(
