@@ -39,7 +39,11 @@
 </script>
 
 <div>
-  <h1>Color Palette</h1>
+  <h2
+    class="scroll-m-20 border-b border-slate-100 pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0"
+  >
+    Color Palette
+  </h2>
   {#if palette.length}
     <div class="flex flex-wrap gap-2">
       {#each palette as color}
@@ -54,6 +58,6 @@
       {/each}
     </div>
   {:else}
-    <p>No colors found</p>
+    <p class="leading-7 [&:not(:first-child)]:mt-6">No colors found</p>
   {/if}
 </div>

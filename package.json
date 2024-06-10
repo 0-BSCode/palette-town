@@ -51,6 +51,7 @@
     "clsx": "^2.1.1",
     "extract-colors": "^4.0.6",
     "get-pixels": "^3.3.3",
+    "lucide-svelte": "^0.394.0",
     "svelte-file-dropzone": "^2.0.7",
     "tailwind-merge": "^2.3.0",
     "tailwind-variants": "^0.2.1"
