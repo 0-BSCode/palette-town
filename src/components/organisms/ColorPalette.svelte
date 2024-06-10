@@ -33,7 +33,6 @@
 
   function handleColorSelect(color: ImageColorI) {
     SelectedColorStore.update((_current) => {
-      console.log("Updating to ", color);
       return color;
     });
   }

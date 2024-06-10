@@ -1,5 +1,7 @@
 <script lang="ts">
   import FileStore from "@/src/stores/fileStore";
+  export let previewText: string;
+  export let heightValue: string;
 
   let fileUrl: string | undefined = undefined;
   let imgElem: HTMLImageElement;
@@ -14,13 +16,19 @@
 
 <!-- Not using conditional rendering bc on first upload, img will be undefined -->
 <div
-  class="relative flex h-full flex-1 flex-col justify-center overflow-y-hidden"
+  class="flex flex-col justify-center px-3 py-6"
+  style={`height: ${heightValue}`}
 >
-  <img
-    bind:this={imgElem}
-    class="h-96 object-contain"
-    alt="Preview"
-    style={`display: ${fileUrl ? "block" : "none"}`}
-  />
+  <div class="relative flex flex-col justify-center overflow-y-hidden">
+    <img
+      bind:this={imgElem}
+      crossorigin="anonymous"
+      class="object-contain"
+      alt="Preview"
+      style={`display: ${fileUrl ? "block" : "none"}`}
+    />
+  </div>
+  {#if !fileUrl}
+    <span style={`display: ${fileUrl ? "none" : "inline"}`}>{previewText}</span>
+  {/if}
 </div>
-<span style={`display: ${fileUrl ? "none" : "inline"}`}>Image Preview</span>

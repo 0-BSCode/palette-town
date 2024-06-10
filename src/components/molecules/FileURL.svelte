@@ -4,6 +4,14 @@
   import Dropzone from "svelte-file-dropzone";
   import Input from "$lib/components/ui/input/input.svelte";
 
+  let imgString: string = "";
+
+  FileStore.subscribe((_fileUrl) => {
+    if (!_fileUrl) {
+      imgString = "";
+    }
+  });
+
   function handlePasteEvent(e: ClipboardEvent) {
     // Clipboard data is either an image or an image url
     // TODO: Handle error
@@ -27,10 +35,14 @@
 </script>
 
 <!-- Paste image data from URL or clipboard -->
-<div>
-  <Input type="text" on:paste={handlePasteEvent} />
-  <!-- <input type="text" accept="image/*" on:paste={handlePasteEvent} /> -->
-  <Dropzone disabled>
-    <FilePreview />
+<div class="flex flex-col gap-2">
+  <Input
+    type="text"
+    on:paste={handlePasteEvent}
+    placeholder="Paste image or image URL"
+    bind:value={imgString}
+  />
+  <Dropzone disabled containerStyles="cursor: not-allowed;">
+    <FilePreview previewText={"Image Preview"} heightValue={"18rem"} />
   </Dropzone>
 </div>

@@ -8,8 +8,12 @@
   import FileStore from "@/src/stores/fileStore";
   import SelectedColorStore from "@/src/stores/selectedColorStore";
 
-  let imgData: File | string | undefined = undefined;
   let activeTab: TabsEnum = TabsEnum.UPLOAD;
+  let disableBtn: boolean = true;
+
+  FileStore.subscribe((_currentFile) => {
+    disableBtn = _currentFile === undefined;
+  });
 
   async function handleDeleteFile() {
     FileStore.update((_currentFile) => {
@@ -21,18 +25,18 @@
   }
 </script>
 
-<div>
-  <Tabs.Root value={activeTab}>
-    <Tabs.List>
-      <Tabs.Trigger value={TabsEnum.UPLOAD}>Upload</Tabs.Trigger>
-      <Tabs.Trigger value={TabsEnum.URL}>URL</Tabs.Trigger>
-    </Tabs.List>
-    <!-- Upload image from local -->
-    <Tabs.Content value={TabsEnum.UPLOAD}>
-      <FileDropzone />
-    </Tabs.Content>
-    <!-- Upload image from URL or clipboard-->
-    <Tabs.Content value={TabsEnum.URL}><FileUrl /></Tabs.Content>
-    <Button on:click={handleDeleteFile}>Delete</Button>
-  </Tabs.Root>
-</div>
+<Tabs.Root value={activeTab} class="flex w-full flex-col items-center gap-1">
+  <Tabs.List class="w-full">
+    <Tabs.Trigger value={TabsEnum.UPLOAD} class="w-full">Upload</Tabs.Trigger>
+    <Tabs.Trigger value={TabsEnum.URL} class="w-full">URL</Tabs.Trigger>
+  </Tabs.List>
+  <!-- Upload image from local -->
+  <Tabs.Content value={TabsEnum.UPLOAD} class="w-full">
+    <FileDropzone />
+  </Tabs.Content>
+  <!-- Upload image from URL or clipboard-->
+  <Tabs.Content value={TabsEnum.URL} class="w-full"><FileUrl /></Tabs.Content>
+  <Button on:click={handleDeleteFile} class="mt-3 w-full" disabled={disableBtn}
+    >Delete</Button
+  >
+</Tabs.Root>

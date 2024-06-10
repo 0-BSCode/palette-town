@@ -26,13 +26,19 @@
   }
 </script>
 
-<div>
+<div class="flex flex-col items-center gap-2">
+  <h1 class="scroll-m-20 text-lg font-extrabold tracking-tight lg:text-2xl">
+    Upload Image
+  </h1>
   <Dropzone
     on:drop={handleFilesSelect}
     accept="image/*"
     multiple={false}
-    containerStyles="padding-block: 0.5rem; display: flex; flex-direction: column; flex: 2; align-items: center; justify-content: center; border: 2px dashed #ccc; border-radius: 5px; width: 100%;"
+    containerStyles="padding-block: 0.5rem; display: flex; flex-direction: column; flex: 2; align-items: center; justify-content: center; border: 2px dashed #ccc; border-radius: 5px; width: 100%"
   >
-    <FilePreview />
+    <FilePreview
+      previewText={"Browse or upload an image"}
+      heightValue={"20rem"}
+    />
   </Dropzone>
 </div>
