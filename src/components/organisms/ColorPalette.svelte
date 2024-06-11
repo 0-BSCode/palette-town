@@ -14,6 +14,7 @@
       const colors = await extractColorsFromSrc(value, {
         // TODO: Allow users to tweak
         distance: 0.2,
+        crossOrigin: "anonymous",
       });
       palette = colors.map((r) => ({
         ...r,

@@ -14,7 +14,6 @@
   });
 </script>
 
-<!-- Not using conditional rendering bc on first upload, img will be undefined -->
 <div
   class="flex flex-col justify-center px-3 py-6"
   style={`height: ${heightValue}`}
@@ -22,7 +21,6 @@
   <div class="relative flex flex-col justify-center overflow-y-hidden">
     <img
       bind:this={imgElem}
-      crossorigin="anonymous"
       class="object-contain"
       alt="Preview"
       style={`display: ${fileUrl ? "block" : "none"}`}
