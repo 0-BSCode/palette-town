@@ -4,7 +4,7 @@
   import { ColorPaletteEnum } from "@/src/types/enums/ColorPaletteEnum";
   import type { ColorPaletteI } from "@/src/types/interfaces/ColorPaletteInterface";
   import type { ImageColorI } from "@/src/types/interfaces/ImageColorInterface";
-  import SelectInput from "../molecules/SelectInput.svelte";
+  import * as Select from "$lib/components/ui/select/index.js";
 
   const options = [
     {
@@ -67,6 +67,8 @@
   $: if (selectedColor) {
     setPalette(selectedColor, paletteMode);
   }
+
+  $: console.log(paletteMode);
 </script>
 
 <div>
@@ -75,12 +77,25 @@
   >
     Color Recommendations
   </h2>
-  <SelectInput {options} placeholder="Select mode" value={paletteMode} />
-  <select bind:value={paletteMode}>
-    {#each Object.values(ColorPaletteEnum) as value}
-      <option {value} selected={paletteMode === value}>{value}</option>
-    {/each}
-  </select>
+  <!-- Select Input -->
+  <Select.Root
+    selected={options.filter((option) => option.value === paletteMode)[0]}
+  >
+    <Select.Trigger class="w-[180px]">
+      <Select.Value placeholder="Select mode" />
+    </Select.Trigger>
+    <Select.Content>
+      {#each options as option}
+        <Select.Item
+          value={option.value}
+          label={option.label}
+          on:click={() => (paletteMode = option.value)}
+          >{option.label}</Select.Item
+        >
+      {/each}
+    </Select.Content>
+    <Select.Input name="option" bind:value={paletteMode} />
+  </Select.Root>
   {#if paletteRecommendation}
     <div class="flex flex-1">
       {#each paletteRecommendation.colors || [] as paletteColor}
