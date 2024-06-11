@@ -1,5 +1,14 @@
 <script lang="ts">
   import FileStore from "@/src/stores/fileStore";
+  import { mode } from "mode-watcher";
+  import Dropzone from "svelte-file-dropzone";
+  import FilePreview from "./FilePreview.svelte";
+
+  let themeMode: string | undefined = "light";
+
+  mode.subscribe((_currentMode) => {
+    themeMode = _currentMode;
+  });
 
   interface DropzoneEvent {
     detail: {
@@ -7,9 +16,6 @@
       fileRejections: File[];
     };
   }
-
-  import Dropzone from "svelte-file-dropzone";
-  import FilePreview from "./FilePreview.svelte";
 
   function handleFilesSelect(e: DropzoneEvent) {
     const { acceptedFiles, fileRejections } = e.detail;
@@ -27,14 +33,11 @@
 </script>
 
 <div class="flex flex-col items-center gap-2">
-  <h1 class="scroll-m-20 text-lg font-extrabold tracking-tight lg:text-2xl">
-    Upload Image
-  </h1>
   <Dropzone
     on:drop={handleFilesSelect}
     accept="image/*"
     multiple={false}
-    containerStyles="padding-block: 0.5rem; display: flex; flex-direction: column; flex: 2; align-items: center; justify-content: center; border: 2px dashed #ccc; border-radius: 5px; width: 100%"
+    containerStyles={`background-color: ${themeMode === "dark" ? "black" : "white"}; padding-block: 0.5rem; display: flex; flex-direction: column; flex: 2; align-items: center; justify-content: center; border: 2px dashed #ccc; border-radius: 5px; width: 100%`}
   >
     <FilePreview
       previewText={"Browse or upload an image"}

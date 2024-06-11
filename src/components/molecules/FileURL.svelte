@@ -3,8 +3,14 @@
   import FilePreview from "./FilePreview.svelte";
   import Dropzone from "svelte-file-dropzone";
   import Input from "$lib/components/ui/input/input.svelte";
+  import { mode } from "mode-watcher";
 
   let imgString: string = "";
+  let theme: string | undefined = "light";
+
+  mode.subscribe((_currentMode) => {
+    theme = _currentMode;
+  });
 
   FileStore.subscribe((_fileUrl) => {
     if (!_fileUrl) {
@@ -42,7 +48,10 @@
     placeholder="Paste image or image URL"
     bind:value={imgString}
   />
-  <Dropzone disabled containerStyles="cursor: not-allowed;">
+  <Dropzone
+    disabled
+    containerStyles={`background-color: ${theme === "dark" ? "black" : "white"}; padding-block: 0.5rem; display: flex; flex-direction: column; flex: 2; align-items: center; justify-content: center; border: 2px dashed #ccc; cursor: not-allowed; border-radius: 5px`}
+  >
     <FilePreview previewText={"Image Preview"} heightValue={"18rem"} />
   </Dropzone>
 </div>

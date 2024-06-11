@@ -1,5 +1,6 @@
 <script lang="ts">
   import Button from "$lib/components/ui/button/button.svelte";
+  import Separator from "$lib/components/ui/separator/separator.svelte";
   import FileStore from "@/src/stores/fileStore";
   import SelectedColorStore from "@/src/stores/selectedColorStore";
   import type { ImageColorI } from "@/src/types/interfaces/ImageColorInterface";
@@ -41,14 +42,16 @@
 
 <div>
   <h2
-    class="scroll-m-20 border-b border-slate-100 pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0"
+    class="scroll-m-20 pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0"
   >
     Color Palette
   </h2>
+  <Separator class="my-4" />
   {#if palette.length}
     <div class="flex flex-wrap gap-2">
       {#each palette as color}
         <Button
+          class="h-24 w-24"
           style={`background-color: ${color.hex}; color: ${color.isDark ? "white" : "black"}; ${color.hex === selectedColor?.hex ? "border: 2px solid black" : ""}`}
           on:click={() => handleColorSelect(color)}
         >

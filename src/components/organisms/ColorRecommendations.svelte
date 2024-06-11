@@ -5,6 +5,9 @@
   import type { ColorPaletteI } from "@/src/types/interfaces/ColorPaletteInterface";
   import type { ImageColorI } from "@/src/types/interfaces/ImageColorInterface";
   import * as Select from "$lib/components/ui/select/index.js";
+  import Separator from "$lib/components/ui/separator/separator.svelte";
+  import Button from "$lib/components/ui/button/button.svelte";
+  import Label from "$lib/components/ui/label/label.svelte";
 
   const options = [
     {
@@ -67,43 +70,47 @@
   $: if (selectedColor) {
     setPalette(selectedColor, paletteMode);
   }
-
-  $: console.log(paletteMode);
 </script>
 
 <div>
   <h2
-    class="scroll-m-20 border-b border-slate-100 pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0"
+    class="scroll-m-20pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0"
   >
     Color Recommendations
   </h2>
+  <Separator class="my-4" />
   <!-- Select Input -->
-  <Select.Root
-    selected={options.filter((option) => option.value === paletteMode)[0]}
-  >
-    <Select.Trigger class="w-[180px]">
-      <Select.Value placeholder="Select mode" />
-    </Select.Trigger>
-    <Select.Content>
-      {#each options as option}
-        <Select.Item
-          value={option.value}
-          label={option.label}
-          on:click={() => (paletteMode = option.value)}
-          >{option.label}</Select.Item
-        >
-      {/each}
-    </Select.Content>
-    <Select.Input name="option" bind:value={paletteMode} />
-  </Select.Root>
+  <div>
+    <Label for="option">Palette Mode</Label>
+    <Select.Root
+      selected={options.filter((option) => option.value === paletteMode)[0]}
+      disabled={selectedColor === undefined}
+    >
+      <Select.Trigger class="w-[180px]">
+        <Select.Value placeholder="Select mode" />
+      </Select.Trigger>
+      <Select.Content>
+        {#each options as option}
+          <Select.Item
+            value={option.value}
+            label={option.label}
+            on:click={() => (paletteMode = option.value)}
+            >{option.label}</Select.Item
+          >
+        {/each}
+      </Select.Content>
+      <Select.Input name="option" bind:value={paletteMode} />
+    </Select.Root>
+  </div>
   {#if paletteRecommendation}
-    <div class="flex flex-1">
+    <div class="mt-4 flex flex-1 flex-wrap gap-2">
       {#each paletteRecommendation.colors || [] as paletteColor}
-        <button
-          style={`flex: 1; background-color: ${paletteColor.hex}; color: ${paletteColor.isDark ? "white" : "black"}`}
+        <Button
+          class="h-24 w-24"
+          style={`background-color: ${paletteColor.hex}; color: ${paletteColor.isDark ? "white" : "black"}`}
         >
           {paletteColor.hex}
-        </button>
+        </Button>
       {/each}
     </div>
   {/if}

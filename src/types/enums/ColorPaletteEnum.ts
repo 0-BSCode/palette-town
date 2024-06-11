@@ -3,7 +3,7 @@ export enum ColorPaletteEnum {
   MONOCHROME_DARK = "monochrome-dark",
   MONOCHROME_LIGHT = "monochrome-light",
   ANALOGIC = "analogic",
-  COMPLEMENTARY = "complementary",
+  COMPLEMENTARY = "complement",
   ANALOGIC_COMPLEMENT = "analogic-complement",
   TRIAD = "triad",
   QUAD = "quad",
