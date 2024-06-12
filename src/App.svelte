@@ -8,11 +8,11 @@
 
 <main class="flex h-screen min-h-fit flex-col bg-secondary md:flex-row">
   <ModeToggle />
-  <nav class="mx-8 my-5 flex flex-col items-center gap-2">
+  <nav class="mx-8 my-5 flex flex-col items-center gap-2 md:w-1/4">
     <FileInput />
   </nav>
   <body
-    class="flex h-full flex-grow flex-col gap-6 overflow-y-auto px-5 py-5 md:py-3"
+    class="flex h-full flex-grow flex-col gap-6 overflow-y-auto px-5 py-5 md:w-3/4 md:py-3"
   >
     <ColorPalette />
     <ColorRecommendations />
