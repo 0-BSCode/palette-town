@@ -10,6 +10,7 @@
   import Label from "$lib/components/ui/label/label.svelte";
   import { copyText } from "svelte-copy";
   import { Copy, Check } from "svelte-radix";
+  import Spinner from "../atoms/Spinner.svelte";
 
   const options = [
     {
@@ -51,6 +52,7 @@
   let selectedHexString: string | undefined = undefined;
   let paletteMode: ColorPaletteEnum = ColorPaletteEnum.MONOCHROME;
   const colorPaletteService = new ColorPaletteService();
+  let isFetching: boolean = false;
 
   SelectedColorStore.subscribe(async (value) => {
     selectedColor = value;
@@ -64,10 +66,12 @@
     selectedColor: ImageColorI,
     paletteMode: ColorPaletteEnum,
   ) {
+    isFetching = true;
     paletteRecommendation = await colorPaletteService.fetchPalette(
       selectedColor.hex,
       paletteMode,
     );
+    isFetching = false;
   }
 
   function handleTextCopy(hex: string) {
@@ -114,24 +118,31 @@
       <Select.Input name="option" bind:value={paletteMode} />
     </Select.Root>
   </div>
-  {#if paletteRecommendation}
-    <div class="mt-4 flex flex-1 flex-wrap gap-2">
-      {#each paletteRecommendation.colors || [] as paletteColor}
-        <Button
-          on:click={() => handleTextCopy(paletteColor.hex)}
-          class="relative h-24 w-24"
-          style={`background-color: ${paletteColor.hex}; color: ${paletteColor.isDark ? "white" : "black"}`}
-        >
-          <p>
-            {paletteColor.hex}
-          </p>
-          {#if paletteColor.hex === selectedHexString}
-            <Check class="absolute right-1 top-1" size={20} />
-          {:else}
-            <Copy class="absolute right-1 top-1" size={20} />
-          {/if}
-        </Button>
-      {/each}
+  {#if isFetching}
+    <div class="flex h-24 w-full flex-col justify-center">
+      <Spinner />
     </div>
+  {:else}
+    <!-- Color Recommendation -->
+    {#if paletteRecommendation}
+      <div class="mt-4 flex flex-1 flex-wrap gap-2">
+        {#each paletteRecommendation.colors || [] as paletteColor}
+          <Button
+            on:click={() => handleTextCopy(paletteColor.hex)}
+            class="relative h-24 w-24"
+            style={`background-color: ${paletteColor.hex}; color: ${paletteColor.isDark ? "white" : "black"}`}
+          >
+            <p>
+              {paletteColor.hex}
+            </p>
+            {#if paletteColor.hex === selectedHexString}
+              <Check class="absolute right-1 top-1" size={20} />
+            {:else}
+              <Copy class="absolute right-1 top-1" size={20} />
+            {/if}
+          </Button>
+        {/each}
+      </div>
+    {/if}
   {/if}
 </div>
