@@ -29,7 +29,10 @@
   <h1 class="scroll-m-20 text-xl font-extrabold tracking-tight lg:text-2xl">
     Image Upload
   </h1>
-  <Tabs.Root value={activeTab} class="flex w-full flex-col items-center gap-1">
+  <Tabs.Root
+    value={activeTab}
+    class="mt-2 flex w-full flex-col items-center gap-1"
+  >
     <Tabs.List class="w-full">
       <Tabs.Trigger value={TabsEnum.UPLOAD} class="w-full">Upload</Tabs.Trigger>
       <Tabs.Trigger value={TabsEnum.URL} class="w-full">URL</Tabs.Trigger>
