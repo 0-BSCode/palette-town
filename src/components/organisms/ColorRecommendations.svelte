@@ -8,6 +8,8 @@
   import Separator from "$lib/components/ui/separator/separator.svelte";
   import Button from "$lib/components/ui/button/button.svelte";
   import Label from "$lib/components/ui/label/label.svelte";
+  import { copyText } from "svelte-copy";
+  import { Copy, Check } from "svelte-radix";
 
   const options = [
     {
@@ -46,6 +48,7 @@
 
   let paletteRecommendation: ColorPaletteI | undefined = undefined;
   let selectedColor: ImageColorI | undefined = undefined;
+  let selectedHexString: string | undefined = undefined;
   let paletteMode: ColorPaletteEnum = ColorPaletteEnum.MONOCHROME;
   const colorPaletteService = new ColorPaletteService();
 
@@ -65,6 +68,15 @@
       selectedColor.hex,
       paletteMode,
     );
+  }
+
+  function handleTextCopy(hex: string) {
+    copyText(hex);
+    selectedHexString = hex;
+
+    setTimeout(() => {
+      selectedHexString = undefined;
+    }, 3000);
   }
 
   $: if (selectedColor) {
@@ -106,10 +118,18 @@
     <div class="mt-4 flex flex-1 flex-wrap gap-2">
       {#each paletteRecommendation.colors || [] as paletteColor}
         <Button
-          class="h-24 w-24"
+          on:click={() => handleTextCopy(paletteColor.hex)}
+          class="relative h-24 w-24"
           style={`background-color: ${paletteColor.hex}; color: ${paletteColor.isDark ? "white" : "black"}`}
         >
-          {paletteColor.hex}
+          <p>
+            {paletteColor.hex}
+          </p>
+          {#if paletteColor.hex === selectedHexString}
+            <Check class="absolute right-1 top-1" />
+          {:else}
+            <Copy class="absolute right-1 top-1" />
+          {/if}
         </Button>
       {/each}
     </div>
