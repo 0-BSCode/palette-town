@@ -92,7 +92,7 @@
   </h2>
   <Separator class="my-4" />
   <!-- Select Input -->
-  <div>
+  <div class="flex flex-col gap-2">
     <Label for="option">Palette Mode</Label>
     <Select.Root
       selected={options.filter((option) => option.value === paletteMode)[0]}
@@ -126,9 +126,9 @@
             {paletteColor.hex}
           </p>
           {#if paletteColor.hex === selectedHexString}
-            <Check class="absolute right-1 top-1" />
+            <Check class="absolute right-1 top-1" size={20} />
           {:else}
-            <Copy class="absolute right-1 top-1" />
+            <Copy class="absolute right-1 top-1" size={20} />
           {/if}
         </Button>
       {/each}

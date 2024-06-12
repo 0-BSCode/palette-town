@@ -6,7 +6,7 @@
   import type { ImageColorI } from "@/src/types/interfaces/ImageColorInterface";
   import calculateRGBBrightness from "@/src/utils/calculateRGBBrightness";
   import { extractColorsFromSrc } from "extract-colors";
-  import EyeOpen from "svelte-radix/EyeOpen.svelte";
+  import { EyeOpen, EyeClosed } from "svelte-radix";
 
   let palette: ImageColorI[] = [];
   let selectedColor: ImageColorI | undefined = undefined;
@@ -72,7 +72,9 @@
             {color.hex}
           </p>
           {#if color.hex === selectedColor?.hex}
-            <EyeOpen class="absolute right-2 top-2" />
+            <EyeOpen class="absolute right-2 top-2" size={20} />
+          {:else}
+            <EyeClosed class="absolute right-2 top-2 z-50" size={20} />
           {/if}
         </Button>
       {/each}
