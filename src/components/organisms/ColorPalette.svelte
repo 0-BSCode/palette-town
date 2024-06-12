@@ -6,6 +6,7 @@
   import type { ImageColorI } from "@/src/types/interfaces/ImageColorInterface";
   import calculateRGBBrightness from "@/src/utils/calculateRGBBrightness";
   import { extractColorsFromSrc } from "extract-colors";
+  import EyeOpen from "svelte-radix/EyeOpen.svelte";
 
   let palette: ImageColorI[] = [];
   let selectedColor: ImageColorI | undefined = undefined;
@@ -19,6 +20,7 @@
       });
       palette = colors.map((r) => ({
         ...r,
+        hex: r.hex.toUpperCase(),
         isDark: calculateRGBBrightness(r.red, r.green, r.blue) < 128,
       }));
       SelectedColorStore.update((_current) => {
@@ -38,6 +40,17 @@
       return color;
     });
   }
+
+  function getButtonStyles(color: ImageColorI): string {
+    let styles = `background-color: ${color.hex}; color: ${color.isDark ? "white" : "black"};`;
+
+    if (color.hex === selectedColor?.hex) {
+      styles += `border: 2px solid ${color.isDark ? "white" : "black"};`;
+    }
+
+    console.log(styles);
+    return styles;
+  }
 </script>
 
 <div>
@@ -51,13 +64,16 @@
     <div class="flex flex-wrap gap-2">
       {#each palette as color}
         <Button
-          class="h-24 w-24"
-          style={`background-color: ${color.hex}; color: ${color.isDark ? "white" : "black"}; ${color.hex === selectedColor?.hex ? "border: 2px solid black" : ""}`}
+          class="relative h-24 w-24"
+          style={`background-color: ${color.hex}; color: ${color.isDark ? "white" : "black"};`}
           on:click={() => handleColorSelect(color)}
         >
           <p>
             {color.hex}
           </p>
+          {#if color.hex === selectedColor?.hex}
+            <EyeOpen class="absolute right-2 top-2" />
+          {/if}
         </Button>
       {/each}
     </div>
