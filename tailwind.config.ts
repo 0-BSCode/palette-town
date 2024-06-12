@@ -56,6 +56,11 @@ const config: Config = {
 			},
 			fontFamily: {
 				sans: [...fontFamily.sans]
+			},
+			screens: {
+				'3xs': '375px',
+				'2xs': '480px',
+				'xs': '512px'
 			}
 		}
 	},
